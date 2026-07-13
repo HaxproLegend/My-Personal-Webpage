@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- 1. Load Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- 2. Tailwind config -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        keyframes: {
+          fadeUp: {
+            from: { opacity: '0', transform: 'translateY(30px)' },
+            to:   { opacity: '1', transform: 'translateY(0)' },
+          },
+          scrollline: {
+            from: { width: '1rem' },
+            to:   { width: '3rem' },
+          },
+        },
+        animation: {
+          'fadeUp': 'fadeUp 0.8s ease both',
+          'scrollline': 'scrollline 1.5s ease-in-out infinite alternate',
+        },
+      },
+    },
+  }
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aranya Datta — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+ <nav class="fixed top-0 w-full z-[100] flex justify-between items-center px-6 md:px-10 py-5 backdrop-blur-md bg-[#0a0a0a]/85 border-b border-[#222222]">
+  <!-- Logo -->
+  <div class="font-mono text-xs text-[#e8ff00] tracking-[0.2em] uppercase">
+    // AD
+  </div>
+
+  <!-- Links -->
+  <ul class="hidden md:flex gap-8 list-none">
+    <li><a href="#about"    class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">About</a></li>
+    <li><a href="#skills"   class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Skills</a></li>
+    <li><a href="#projects" class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Projects</a></li>
+    <li><a href="#gear"     class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Gear</a></li>
+    <li><a href="#contact"  class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Contact</a></li>
+  </ul>
+
+  <!-- Spacer to keep logo left-aligned -->
+  <div class="w-8"></div>
+</nav>
+
+
+  <!-- HERO -->
+  <section class="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a0a] border-b border-[#222222]" id="home">
+
+    <!-- Ghost background text -->
+    <div class="absolute right-[-2rem] top-1/2 -translate-y-1/2 font-extrabold text-transparent pointer-events-none select-none whitespace-nowrap leading-none"
+         style="font-family:'Syne',sans-serif; font-size:clamp(6rem,18vw,18rem); -webkit-text-stroke: 1px #1e1e1e;">
+      BUILD
+    </div>
+
+    <div class="relative z-10 max-w-[700px] px-6 md:px-12 animate-[fadeUp_0.8s_ease_both]">
+
+      <!-- Tag line -->
+      <div class="flex items-center gap-4 mb-6">
+        <span class="inline-block w-8 h-px bg-[#e8ff00]"></span>
+        <span class="font-mono text-[0.7rem] text-[#e8ff00] tracking-[0.3em] uppercase">Available for Opportunities</span>
+      </div>
+
+      <!-- Name -->
+      <p class="font-mono text-[0.8rem] text-[#666666] tracking-[0.2em] mb-2">Aranya Datta</p>
+
+      <!-- Headline -->
+      <h1 class="font-extrabold leading-[0.95] tracking-[-0.03em] text-[#f0f0f0] mb-6"
+          style="font-family:'Syne',sans-serif; font-size:clamp(3rem,7vw,6rem);">
+        I Build<br/><span class="text-[#e8ff00]">Things.</span>
+      </h1>
+
+      <!-- Description -->
+      <p class="font-mono text-[0.85rem] text-[#666666] leading-[1.8] max-w-[480px] mb-10">
+        Class XII graduate. Hardware enthusiast. Photographer.
+      </p>
+
+      <!-- CTA -->
+      <a href="#projects"
+         class="inline-flex items-center gap-3 px-8 py-4 bg-[#e8ff00] text-black font-mono text-[0.75rem] font-bold tracking-[0.15em] uppercase no-underline transition-all duration-200 hover:bg-[#ff4d00] hover:text-white hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#222222]">
+        View My Work →
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-6 md:left-12 flex items-center gap-4 font-mono text-[0.65rem] text-[#666666] tracking-[0.2em] uppercase">
+      Scroll
+      <span class="inline-block h-px bg-[#666666] animate-[scrollline_1.5s_ease-in-out_infinite_alternate]" style="width:3rem;"></span>
+    </div>
+
+  </section>
+
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">01 — About</div>
+    <div class="about-grid">
+      <div class="about-text">
+        <h2>Who<br/>I Am.</h2>
+        <p>
+          I'm a <strong>Class 12 CBSE graduate</strong> from Delhi with a knack for
+          building things — whether that's a Python health tracker, an electromagnetic
+          induction model, or shooting with a full-frame camera.
+        </p>
+        <p>
+          My interests live at the crossroads of <strong>hardware and software</strong>.
+          I've done Arduino projects, studied ECE-level circuits, and built software from the ground up.
+          I think in systems — how things connect, why they work, and how to make them better.
+        </p>
+        <p>
+          Outside of tech, I'm into <strong>cars, PC hardware, photography, and gaming</strong>.
+          The same obsessive attention to detail applies to all of it.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">PCM</div>
+          <div class="stat-label">+ Computer Science</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Languages / Stacks</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Curiosity</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">02 — Skills</div>
+    <h2>What I<br/>Work With.</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">⌨️</div>
+        <div class="skill-title">Software Development</div>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Tkinter</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🔌</div>
+        <div class="skill-title">Hardware & Electronics</div>
+        <div class="skill-tags">
+          <span class="tag">Arduino</span>
+          <span class="tag">Circuits</span>
+          <span class="tag">Electromagnetic Systems</span>
+          <span class="tag">PC Building</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">📷</div>
+        <div class="skill-title">Photography</div>
+        <div class="skill-tags">
+          <span class="tag">Canon 6D MII</span>
+          <span class="tag">Full Frame</span>
+          <span class="tag">24-70 f/2.8</span>
+          <span class="tag">70-200</span>
+          <span class="tag">Wildlife</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🚗</div>
+        <div class="skill-title">Interests & Domain Knowledge</div>
+        <div class="skill-tags">
+          <span class="tag">Automotive</span>
+          <span class="tag">PC Hardware</span>
+          <span class="tag">Gaming</span>
+          <span class="tag">Embedded Systems</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">03 — Projects</div>
+    <h2>Things I've<br/>Built.</h2>
+    <div class="projects-list">
+
+      <div class="project-item">
+        <div class="project-num">01</div>
+        <div class="project-info">
+          <div class="project-name">Health Tracker App</div>
+          <div class="project-desc">
+            Full-featured desktop application with user login, BMI tracking, calorie logs,
+            exercise history, motivational messages, profile photo upload, and data visualisation graphs.
+          </div>
+          <div class="project-stack">
+            <span class="tag">Python</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Tkinter</span>
+            <span class="tag">GUI</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-item">
+        <div class="project-num">02</div>
+        <div class="project-info">
+          <div class="project-name">Electromagnetic Induction Model</div>
+          <div class="project-desc">
+            Physics investigatory project — a real working model demonstrating electromagnetic
+            induction using copper coils, a 9V battery, resistor, LED, and transistor.
+          </div>
+          <div class="project-stack">
+            <span class="tag">Electronics</span>
+            <span class="tag">Copper Coils</span>
+            <span class="tag">Circuit Design</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-item">
+        <div class="project-num">03</div>
+        <div class="project-info">
+          <div class="project-name">pH Variation in Soaps & Shampoos</div>
+          <div class="project-desc">
+            Chemistry investigatory project testing pH levels across multiple consumer
+            soap and shampoo brands for consumer safety analysis.
+          </div>
+          <div class="project-stack">
+            <span class="tag">Chemistry</span>
+            <span class="tag">Research</span>
+            <span class="tag">Data Analysis</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-item">
+        <div class="project-num">04</div>
+        <div class="project-info">
+          <div class="project-name">Personal Portfolio Website</div>
+          <div class="project-desc">
+            This site — built with pure HTML and an external CSS stylesheet, no frameworks, no JS libraries.
+            Constraint-driven design that forced creative solutions.
+          </div>
+          <div class="project-stack">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">No Frameworks</span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GEAR -->
+  <section id="gear">
+    <div class="section-label">04 — Gear</div>
+    <h2>My<br/>Setup.</h2>
+    <div class="gear-grid">
+      <div class="gear-item">
+        <div class="gear-category">Workstation</div>
+        <div class="gear-name">MacBook Pro i9</div>
+        <div class="gear-spec">1TB · AMD Radeon Pro 5500M<br/>Primary editing machine</div>
+      </div>
+      <div class="gear-item">
+        <div class="gear-category">Portable</div>
+        <div class="gear-name">MacBook Air M1</div>
+        <div class="gear-spec">256GB · Apple Silicon<br/>Everyday carry</div>
+      </div>
+      <div class="gear-item">
+        <div class="gear-category">Mobile</div>
+        <div class="gear-name">iPhone 15</div>
+        <div class="gear-spec">128GB<br/>Always in pocket</div>
+      </div>
+      <div class="gear-item">
+        <div class="gear-category">Camera Body</div>
+        <div class="gear-name">Canon 6D Mark II</div>
+        <div class="gear-spec">Full Frame · 26.2MP<br/>DSLR workhorse</div>
+      </div>
+      <div class="gear-item">
+        <div class="gear-category">Lens — Workhorse</div>
+        <div class="gear-name">Canon EF 24-70mm</div>
+        <div class="gear-spec">f/2.8L USM<br/>Portraits · Events · Street</div>
+      </div>
+      <div class="gear-item">
+        <div class="gear-category">Lens — Telephoto</div>
+        <div class="gear-name">Canon EF 70-200mm</div>
+        <div class="gear-spec">USM<br/>Sports · Reach · Compression</div>
+      </div>
+      <div class="gear-item">
+        <div class="gear-category">Lens — Super Zoom</div>
+        <div class="gear-name">Sigma 150-600mm</div>
+        <div class="gear-spec">f/4.5–6.3<br/>Wildlife · Airshows · Distance</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">05 — Contact</div>
+    <div class="contact-inner">
+      <div class="contact-left">
+        <h2>Let's<br/>Connect.</h2>
+        <p>
+          Open to collaborations, projects,<br/>
+          or just a good conversation about<br/>
+          tech, cars, or cameras.
+        </p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:your@email.com" class="contact-link">
+          <span class="link-label">Email</span>
+          <span class="link-arrow">↗</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="link-label">GitHub</span>
+          <span class="link-arrow">↗</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="link-label">LinkedIn</span>
+          <span class="link-arrow">↗</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="link-label">Instagram — Photography</span>
+          <span class="link-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <div class="system-widget">
+  <div class="sys-label">SYSTEM STATUS</div>
+  <div id="statusText">INITIALIZING...</div>
+  </div>
+<footer>
+
+  <p>© 2026 Aranya Datta — Built with HTML & External CSS</p>
+
+  <p>Delhi, India</p>
+
+</footer>
+
+<script>
+
+const statuses = [
+
+  "CPU: ONLINE",
+
+  "CAMERA: READY",
+
+  "IDEAS: OVERCLOCKED",
+
+  "SYSTEM: STABLE",
+
+  "PROJECTS: LOADING",
+
+  "STATUS: BUILDING"
+
+];
+
+const statusText = document.getElementById("statusText");
+
+let index = 0;
+
+setInterval(() => {
+
+  index = (index + 1) % statuses.length;
+
+  statusText.textContent = statuses[index];
+
+}, 2000);
+
+</script>
+
+</body>
+
+</html>
