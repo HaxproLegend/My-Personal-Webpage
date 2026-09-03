@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TTT.EXE — Aranya's Portfolio</title>
+  <!-- PLAYER_ONE: INSERT COIN -->
+  <!-- BUILD: v1.0.0 | COMMIT: deadbeef | STATUS: RUNNING -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tic-tac-toe-dark.css" />
+</head>
+<body>
+  <div class="container ttt-container">
+
+    <header class="ttt-header">
+      <a href="index.html" class="ttt-back">Back to Portfolio</a>
+      <p class="hero-eyebrow">Web Dev Project</p>
+      <h1>Tic-Tac-Toe</h1>
+      <p class="hero-lead">// Two players. Nine cells. Zero mercy.</p>
+    </header>
+
+    <section class="card ttt-game" aria-labelledby="ttt-status">
+      <div class="ttt-scoreboard">
+        <div class="ttt-score ttt-score--x">
+          <span class="ttt-score-label">// Player X</span>
+          <span class="ttt-score-value" id="score-x">0</span>
+        </div>
+        <div class="ttt-score ttt-score--draw">
+          <span class="ttt-score-label">// Draws</span>
+          <span class="ttt-score-value" id="score-draw">0</span>
+        </div>
+        <div class="ttt-score ttt-score--o">
+          <span class="ttt-score-label">// Player O</span>
+          <span class="ttt-score-value" id="score-o">0</span>
+        </div>
+      </div>
+
+      <p class="ttt-status" id="ttt-status" aria-live="polite">Player X's turn</p>
+
+      <div class="ttt-board" id="board" role="grid" aria-label="Tic-tac-toe board">
+        <!-- data-coord shows cell coordinates on hover -->
+        <button type="button" class="ttt-cell" data-index="0" data-coord="[0,0]" aria-label="Cell 1"></button>
+        <button type="button" class="ttt-cell" data-index="1" data-coord="[0,1]" aria-label="Cell 2"></button>
+        <button type="button" class="ttt-cell" data-index="2" data-coord="[0,2]" aria-label="Cell 3"></button>
+        <button type="button" class="ttt-cell" data-index="3" data-coord="[1,0]" aria-label="Cell 4"></button>
+        <button type="button" class="ttt-cell" data-index="4" data-coord="[1,1]" aria-label="Cell 5"></button>
+        <button type="button" class="ttt-cell" data-index="5" data-coord="[1,2]" aria-label="Cell 6"></button>
+        <button type="button" class="ttt-cell" data-index="6" data-coord="[2,0]" aria-label="Cell 7"></button>
+        <button type="button" class="ttt-cell" data-index="7" data-coord="[2,1]" aria-label="Cell 8"></button>
+        <button type="button" class="ttt-cell" data-index="8" data-coord="[2,2]" aria-label="Cell 9"></button>
+      </div>
+
+      <div class="ttt-actions">
+        <button type="button" class="button" id="reset-round">[ New Round ]</button>
+        <button type="button" class="ttt-btn-secondary" id="reset-scores">Reset Scores</button>
+      </div>
+    </section>
+
+    <!-- hidden easter egg text: select to reveal -->
+    <p class="ttt-footer-note" title="you found it" aria-hidden="true">
+      /* the center cell has a 60.3% win-rate. not that you'd know. */
+    </p>
+
+  </div>
+
+  <script>
+    /* ============================================================
+       CONSOLE EASTER EGG — open devtools to find this
+       ============================================================ */
+    console.log(
+      '%c TTT.EXE LOADED ',
+      'background:#ffe600;color:#000;font-family:monospace;font-weight:700;font-size:14px;padding:4px 8px'
+    );
+    console.log('%c > made by Aranya | github.com/aranya', 'color:#888;font-family:monospace;font-size:11px');
+    console.log('%c > try the Konami code on the page', 'color:#555;font-family:monospace;font-size:11px');
+
+    /* ============================================================
+       KONAMI CODE EASTER EGG
+       ↑ ↑ ↓ ↓ ← → ← → B A — triggers a rainbow board flash
+       ============================================================ */
+    const KONAMI = [38,38,40,40,37,39,37,39,66,65];
+    let konamiIdx = 0;
+    document.addEventListener('keydown', e => {
+      konamiIdx = e.keyCode === KONAMI[konamiIdx] ? konamiIdx + 1 : 0;
+      if (konamiIdx === KONAMI.length) {
+        konamiIdx = 0;
+        document.body.classList.add('konami-active');
+        statusEl.textContent = 'CHEAT CODE ACTIVATED!!';
+        setTimeout(() => {
+          document.body.classList.remove('konami-active');
+          renderStatus();
+        }, 1000);
+      }
+    });
+
+    /* ============================================================
+       GAME LOGIC (mechanics unchanged)
+       ============================================================ */
+    const WIN_LINES = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    let board = Array(9).fill(null);
+    let currentPlayer = 'X';
+    let gameOver = false;
+    let scores = { X: 0, O: 0, draw: 0 };
+
+    const cells      = document.querySelectorAll('.ttt-cell');
+    const statusEl   = document.getElementById('ttt-status');
+    const scoreX     = document.getElementById('score-x');
+    const scoreO     = document.getElementById('score-o');
+    const scoreDraw  = document.getElementById('score-draw');
+    const btnRound   = document.getElementById('reset-round');
+    const btnScores  = document.getElementById('reset-scores');
+
+    function renderStatus() {
+      if (!gameOver) {
+        statusEl.textContent = `Player ${currentPlayer}'s turn`;
+      }
+    }
+
+    function checkWinner() {
+      for (const [a,b,c] of WIN_LINES) {
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return { winner: board[a], line: [a,b,c] };
+        }
+      }
+      if (board.every(Boolean)) return { winner: null, line: [] };
+      return null;
+    }
+
+    function handleClick(e) {
+      const idx = +e.currentTarget.dataset.index;
+      if (board[idx] || gameOver) return;
+
+      board[idx] = currentPlayer;
+      const cell = cells[idx];
+      cell.textContent = currentPlayer;
+      cell.classList.add(`ttt-cell--${currentPlayer.toLowerCase()}`);
+      cell.disabled = true;
+      cell.setAttribute('aria-label', `Cell ${idx+1}, ${currentPlayer}`);
+
+      const result = checkWinner();
+      if (result) {
+        gameOver = true;
+        if (result.winner) {
+          result.line.forEach(i => cells[i].classList.add('ttt-cell--win'));
+          scores[result.winner]++;
+          updateScores();
+          statusEl.textContent = `Player ${result.winner} wins!`;
+          cells.forEach(c => c.disabled = true);
+        } else {
+          scores.draw++;
+          updateScores();
+          statusEl.textContent = `Draw — stalemate.`;
+        }
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        renderStatus();
+      }
+    }
+
+    function updateScores() {
+      scoreX.textContent    = scores.X;
+      scoreO.textContent    = scores.O;
+      scoreDraw.textContent = scores.draw;
+    }
+
+    function resetRound() {
+      board = Array(9).fill(null);
+      gameOver = false;
+      currentPlayer = 'X';
+      cells.forEach((cell, i) => {
+        cell.textContent = '';
+        cell.className = 'ttt-cell';
+        cell.disabled = false;
+        cell.setAttribute('aria-label', `Cell ${i+1}, empty`);
+      });
+      renderStatus();
+    }
+
+    function resetScores() {
+      scores = { X: 0, O: 0, draw: 0 };
+      updateScores();
+      resetRound();
+    }
+
+    cells.forEach(c => c.addEventListener('click', handleClick));
+    btnRound.addEventListener('click', resetRound);
+    btnScores.addEventListener('click', resetScores);
+  </script>
+</body>
+</html>
