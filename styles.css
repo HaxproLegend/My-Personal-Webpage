@@ -254,6 +254,9 @@ h2 {
   background: var(--surface);
   padding: 1.8rem;
   transition: background 0.2s;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 .gear-item:hover { background: #141414; }
 
