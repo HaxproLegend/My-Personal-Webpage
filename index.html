@@ -34,7 +34,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles.css"/>
 </head>
-<body>
+<body class="is-loading">
+
+  <div class="pointer-aurora" aria-hidden="true"></div>
+  <div class="site-loader" role="status" aria-live="polite" aria-label="Loading Aranya's portfolio">
+    <div class="loader-mark" aria-hidden="true"><span>AD</span><i></i><i></i><i></i></div>
+    <p class="loader-kicker">ARANYA DATTA <span>·</span> PORTFOLIO</p>
+    <h1 class="loader-welcome">Welcome<span>.</span></h1>
+    <p class="loader-fact" data-loader-fact>Loading the portfolio experience…</p>
+    <div class="loader-progress" aria-hidden="true"><span></span></div>
+    <div class="loader-footer"><span data-loader-status>CALIBRATING INTERFACE</span><button type="button" data-loader-skip>ENTER NOW ↗</button></div>
+  </div>
+  <noscript><style>.site-loader{display:none!important}</style></noscript>
 
  <nav class="fixed top-0 w-full z-[100] flex justify-between items-center px-6 md:px-10 py-5 backdrop-blur-md bg-[#0a0a0a]/85 border-b border-[#222222]">
   <!-- Logo -->
@@ -60,6 +71,53 @@
 
   <!-- HERO -->
   <section class="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a0a] border-b border-[#222222]" id="home">
+
+    <div class="geometry-field" aria-hidden="true">
+      <svg viewBox="0 0 960 900" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="geometry-metal" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f4f6f7" stop-opacity=".58" />
+            <stop offset=".5" stop-color="#9da4a8" stop-opacity=".2" />
+            <stop offset="1" stop-color="#e8ff00" stop-opacity=".48" />
+          </linearGradient>
+          <radialGradient id="geometry-core">
+            <stop offset="0" stop-color="#e8ff00" stop-opacity=".18" />
+            <stop offset="1" stop-color="#e8ff00" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <ellipse class="geometry-orbit" cx="555" cy="452" rx="278" ry="365" transform="rotate(27 555 452)" />
+        <ellipse class="geometry-orbit geometry-orbit--inner" cx="555" cy="452" rx="214" ry="302" transform="rotate(-31 555 452)" />
+        <circle class="geometry-core" cx="555" cy="452" r="170" />
+
+        <!-- Plotted conics: a parabola and the paired arms of a hyperbola. -->
+        <path class="geometry-curve geometry-curve--parabola" d="M86 742 Q516 28 914 724" />
+        <path class="geometry-curve geometry-curve--hyperbola" d="M525 78 C364 220 350 335 359 454 C368 590 327 703 190 832" />
+        <path class="geometry-curve geometry-curve--hyperbola" d="M585 78 C746 220 760 335 751 454 C742 590 783 703 920 832" />
+        <path class="geometry-curve geometry-curve--sweep" d="M129 295 C348 467 704 437 924 256" />
+
+        <g transform="translate(555 452)">
+          <g class="geometry-gear geometry-gear--outer">
+            <circle r="105" />
+            <circle class="gear-teeth" r="91" />
+            <circle r="68" />
+            <path d="M0-105v34 M0 71v34 M-105 0h34 M71 0h34 M-74-74l24 24 M50 50l24 24 M74-74L50-50 M-50 50l-24 24" />
+          </g>
+        </g>
+        <g transform="translate(555 452)">
+          <g class="geometry-gear geometry-gear--inner">
+            <circle r="43" />
+            <circle class="gear-teeth" r="31" />
+            <path d="M0-43v18 M0 25v18 M-43 0h18 M25 0h18 M-30-30l13 13 M17 17l13 13 M30-30L17-17 M-17 17l-13 13" />
+            <circle class="gear-hub" r="10" />
+          </g>
+        </g>
+
+        <path class="geometry-datum" d="M555 110v684 M219 452h672" />
+        <circle class="geometry-node" cx="359" cy="454" r="4" />
+        <circle class="geometry-node" cx="751" cy="454" r="4" />
+        <text class="geometry-caption" x="690" y="810">CONIC STUDY / 01</text>
+      </svg>
+    </div>
 
     <!-- Ghost background text -->
     <div class="absolute right-[-2rem] top-1/2 -translate-y-1/2 font-extrabold text-transparent pointer-events-none select-none whitespace-nowrap leading-none"
@@ -447,14 +505,21 @@ if ("PointerEvent" in window) {
   let targetY = window.innerHeight / 2;
   let currentX = targetX;
   let currentY = targetY;
-  let pendingSpectrumSection = null;
-  let activeSpectrumSection = null;
   let lastFrameTime = 0;
+  const geometryField = document.querySelector(".geometry-field");
   window.addEventListener("pointermove", (event) => {
     if (event.pointerType === "touch") return;
     targetX = event.clientX;
     targetY = event.clientY;
-    pendingSpectrumSection = event.target.closest?.("section") ?? null;
+    if (geometryField && event.target.closest?.("#home")) {
+      const home = document.getElementById("home");
+      const homeBounds = home.getBoundingClientRect();
+      const offsetX = (event.clientX - (homeBounds.left + homeBounds.width / 2)) / Math.max(homeBounds.width, 1);
+      const offsetY = (event.clientY - (homeBounds.top + homeBounds.height / 2)) / Math.max(homeBounds.height, 1);
+      geometryField.style.setProperty("--field-x", `${(-offsetX * 18).toFixed(1)}px`);
+      geometryField.style.setProperty("--field-y", `${(-offsetY * 14).toFixed(1)}px`);
+    }
+    document.querySelector(".pointer-aurora")?.classList.add("is-active");
     const tile = event.target.closest?.(".hero-tile");
     if (tile) {
       const bounds = tile.getBoundingClientRect();
@@ -473,12 +538,6 @@ if ("PointerEvent" in window) {
     currentY += (targetY - currentY) * follow;
     document.documentElement.style.setProperty("--pointer-x", `${currentX.toFixed(1)}px`);
     document.documentElement.style.setProperty("--pointer-y", `${currentY.toFixed(1)}px`);
-
-    if (activeSpectrumSection !== pendingSpectrumSection) {
-      activeSpectrumSection?.classList.remove("has-spectrum");
-      activeSpectrumSection = pendingSpectrumSection;
-      activeSpectrumSection?.classList.add("has-spectrum");
-    }
 
     if (Math.abs(targetX - currentX) > 0.5 || Math.abs(targetY - currentY) > 0.5) {
       pointerFrame = requestAnimationFrame(moveAura);
@@ -566,6 +625,40 @@ if ("PointerEvent" in window) {
   });
   }
 }
+
+// Keep the chromatic pointer field alive across scrolling and section boundaries.
+window.addEventListener("pointerout", (event) => {
+  if (!event.relatedTarget) document.querySelector(".pointer-aurora")?.classList.remove("is-active");
+});
+
+// Short welcome interlude. Visitors can skip it; reduced-motion visitors get a brief fade.
+const siteLoader = document.querySelector(".site-loader");
+const loaderFact = document.querySelector("[data-loader-fact]");
+const loaderStatus = document.querySelector("[data-loader-status]");
+const loaderFacts = [
+  ["A Canon 6D Mark II is part of the camera kit behind this portfolio.", "CAMERA SYSTEM READY"],
+  ["Formula 1, photography, and design all made it into the brief.", "INTERESTS: ONLINE"],
+  ["This interface shifts between graphite and brushed-aluminium light mode.", "TWO THEMES: SYNCHRONIZED"],
+];
+let loaderFactIndex = 0;
+const factTicker = window.setInterval(() => {
+  loaderFactIndex = (loaderFactIndex + 1) % loaderFacts.length;
+  if (loaderFact) loaderFact.textContent = loaderFacts[loaderFactIndex][0];
+  if (loaderStatus) loaderStatus.textContent = loaderFacts[loaderFactIndex][1];
+}, 560);
+let loaderDismissed = false;
+function dismissLoader() {
+  if (!siteLoader || loaderDismissed) return;
+  loaderDismissed = true;
+  window.clearInterval(factTicker);
+  document.body.classList.remove("is-loading");
+  document.documentElement.classList.remove("page-loading");
+  siteLoader.classList.add("is-leaving");
+  window.setTimeout(() => siteLoader.remove(), 620);
+}
+document.documentElement.classList.add("page-loading");
+document.querySelector("[data-loader-skip]")?.addEventListener("click", dismissLoader);
+window.setTimeout(dismissLoader, reduceMotion.matches ? 500 : 2100);
 
 // Distinct, one-time reveal treatments turn each content section into a new scene.
 if (!reduceMotion.matches && "IntersectionObserver" in window) {
