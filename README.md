@@ -1,24 +1,13 @@
 # Aranya Datta — Portfolio
 
-A personal portfolio about software, hardware, automotive design, and photography. Built with a graphite and brushed-aluminum visual theme.
-
-## Featured project
-
-**Hyperworld** is an in-progress interactive showcase for unusual and under-the-radar performance cars.
-
-## Built with
-
-HTML · CSS · JavaScript
+A personal portfolio built with the original charcoal and electric-lime visual style, animated geometric artwork, interactive theme switch, and scroll transitions.
 
 ## Run locally
 
-Open `index.html` in a browser. The page uses Google Fonts, which load when you’re online.
+Open `index.html` in a browser. Keep `styles.css` beside it. The layout uses Tailwind from its CDN, and Google Fonts are loaded online; the page's animations and interactions are included in the HTML.
 
-## Project files
+## Files
 
-- `index.html` — page content
-- `styles.css` — layout, visual theme, and motion
-- `script.js` — scroll reveal effects
-- `assets/cc850-hero.png` — automotive hero artwork
-
-The hero artwork is AI-generated and intended to depict a Koenigsegg CC850; it is not an official manufacturer photo.
+- `index.html` — page content and interactions
+- `styles.css` — layout, visual styling, and animation keyframes
+- `script.js` — retained scroll-reveal helper from the newer version; the restored page does not depend on it
