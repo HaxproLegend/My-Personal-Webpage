@@ -58,6 +58,7 @@
     <li><a href="#about"    class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">About</a></li>
     <li><a href="#skills"   class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Skills</a></li>
     <li><a href="#projects" class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Projects</a></li>
+    <li><a href="#photobooth" class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Photos</a></li>
     <li><a href="#gear"     class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Gear</a></li>
     <li><a href="#contact"  class="font-mono text-[0.7rem] text-[#666666] tracking-[0.15em] uppercase no-underline hover:text-[#e8ff00] transition-colors duration-200">Contact</a></li>
   </ul>
@@ -391,6 +392,22 @@
       </div>
   </dialog>
 
+  <!-- PHOTOBOOTH -->
+  <section id="photobooth" class="photobooth-section">
+    <div class="section-label">04 — Photobooth</div>
+    <div class="photobooth-heading">
+      <div><h2>Frames<br/><span>Worth Keeping.</span></h2><p>Selected studies in light, texture, and timing. Scroll the dates to move through the archive.</p></div>
+      <div class="photobooth-date" aria-live="polite"><span id="photo-index">01 / 01</span><strong id="photo-date">Featured frame</strong></div>
+    </div>
+    <div class="photobooth-shell">
+      <div class="photobooth-frame"><img id="photo-image" src="assets/cc850-hero.png" alt="Featured photograph" /><div class="photobooth-frame-label">ARANYA DATTA / PHOTO ARCHIVE</div></div>
+      <aside class="photobooth-info"><p class="photobooth-kicker" id="photo-title">Featured frame</p><p class="photobooth-caption" id="photo-caption">Add your favourite images to the archive and keep the story behind every frame close.</p>
+        <dl class="photo-settings"><div><dt>Lens</dt><dd id="photo-lens">Canon EF 24–70mm</dd></div><div><dt>Settings</dt><dd id="photo-settings">50mm · f/2.8 · 1/250s · ISO 100</dd></div></dl>
+        <div class="photobooth-controls"><button type="button" id="photo-prev" aria-label="Previous photo">←</button><div class="photobooth-dates" id="photo-dates"></div><button type="button" id="photo-next" aria-label="Next photo">→</button></div>
+      </aside>
+    </div>
+  </section>
+
   <!-- GEAR -->
   <section id="gear">
     <div class="section-label">04 — Gear</div>
@@ -572,6 +589,40 @@ if (quickGameCells.length) {
     quickGameDialog?.showModal();
   });
   document.querySelector("[data-quick-game-close]")?.addEventListener("click", () => quickGameDialog?.close());
+}
+
+// Photo archive: add new objects here as each favourite frame is selected.
+const photoArchive = [{
+  date: "Featured frame", title: "Light study", image: "assets/cc850-hero.png",
+  caption: "Add your favourite images to the archive and keep the story behind every frame close.",
+  lens: "Canon EF 24–70mm", settings: "50mm · f/2.8 · 1/250s · ISO 100", tint: "#333b2c"
+}];
+const photoImage = document.getElementById("photo-image");
+if (photoImage) {
+  const photoSection = document.getElementById("photobooth");
+  const photoFrame = document.querySelector(".photobooth-frame");
+  const photoDates = document.getElementById("photo-dates");
+  let photoPointer = 0;
+  function renderPhoto(index) {
+    const photo = photoArchive[index];
+    photoFrame.classList.add("is-changing");
+    window.setTimeout(() => {
+      photoImage.src = photo.image; photoImage.alt = photo.title;
+      document.getElementById("photo-index").textContent = `${String(index + 1).padStart(2, "0")} / ${String(photoArchive.length).padStart(2, "0")}`;
+      document.getElementById("photo-date").textContent = photo.date;
+      document.getElementById("photo-title").textContent = photo.title;
+      document.getElementById("photo-caption").textContent = photo.caption;
+      document.getElementById("photo-lens").textContent = photo.lens;
+      document.getElementById("photo-settings").textContent = photo.settings;
+      photoSection.style.setProperty("--photo-tint", photo.tint);
+      photoDates.querySelectorAll("button").forEach((button, buttonIndex) => button.classList.toggle("is-active", buttonIndex === index));
+      photoFrame.classList.remove("is-changing");
+    }, 180);
+  }
+  photoArchive.forEach((photo, index) => { const button = document.createElement("button"); button.type = "button"; button.textContent = photo.date; button.addEventListener("click", () => { photoPointer = index; renderPhoto(photoPointer); }); photoDates.append(button); });
+  document.getElementById("photo-prev").addEventListener("click", () => { photoPointer = (photoPointer - 1 + photoArchive.length) % photoArchive.length; renderPhoto(photoPointer); });
+  document.getElementById("photo-next").addEventListener("click", () => { photoPointer = (photoPointer + 1) % photoArchive.length; renderPhoto(photoPointer); });
+  renderPhoto(0);
 }
 
 function applyTheme(theme) {
