@@ -339,7 +339,7 @@
         <div class="project-arrow">↗</div>
       </div>
 
-      <a href="tic-tac-toe-dark.html" class="project-item">
+      <a href="#quick-game" class="project-item" data-quick-game-open>
         <div class="project-num">05</div>
         <div class="project-info">
           <div class="project-name">Tic-Tac-Toe</div>
@@ -356,7 +356,40 @@
       </a>
 
     </div>
+
   </section>
+
+  <dialog class="quick-game" id="quick-game" aria-labelledby="quick-game-title">
+      <div class="quick-game-copy">
+        <div class="section-label">Quick Play</div>
+        <h3 id="quick-game-title">Take a<br/><span>Break.</span></h3>
+        <p>A tiny two-player tic-tac-toe match, right here on the portfolio.</p>
+        <p class="quick-game-status" id="quick-game-status" aria-live="polite">Player X's turn</p>
+        <div class="quick-game-actions">
+          <button class="glow-control" type="button" id="quick-game-reset">New round</button>
+          <button class="quick-game-close" type="button" data-quick-game-close>Close</button>
+          <a href="tic-tac-toe-dark.html">Open full game ↗</a>
+        </div>
+      </div>
+      <div class="quick-game-play">
+        <div class="quick-game-score" aria-label="Match score">
+          <span>X <b id="quick-score-x">0</b></span>
+          <span>Draw <b id="quick-score-draw">0</b></span>
+          <span>O <b id="quick-score-o">0</b></span>
+        </div>
+        <div class="quick-game-board" role="group" aria-label="Tic-tac-toe board">
+          <button type="button" data-quick-cell="0" aria-label="Cell 1, empty"></button>
+          <button type="button" data-quick-cell="1" aria-label="Cell 2, empty"></button>
+          <button type="button" data-quick-cell="2" aria-label="Cell 3, empty"></button>
+          <button type="button" data-quick-cell="3" aria-label="Cell 4, empty"></button>
+          <button type="button" data-quick-cell="4" aria-label="Cell 5, empty"></button>
+          <button type="button" data-quick-cell="5" aria-label="Cell 6, empty"></button>
+          <button type="button" data-quick-cell="6" aria-label="Cell 7, empty"></button>
+          <button type="button" data-quick-cell="7" aria-label="Cell 8, empty"></button>
+          <button type="button" data-quick-cell="8" aria-label="Cell 9, empty"></button>
+        </div>
+      </div>
+  </dialog>
 
   <!-- GEAR -->
   <section id="gear">
@@ -477,6 +510,69 @@ const statusText = document.getElementById("statusText");
 const themeToggle = document.querySelector("[data-theme-toggle]");
 const themeLabel = document.querySelector("[data-theme-label]");
 const themeIcon = document.querySelector("[data-theme-icon]");
+
+// Compact tic-tac-toe keeps the original game playable without leaving the portfolio.
+const quickGameCells = [...document.querySelectorAll("[data-quick-cell]")];
+if (quickGameCells.length) {
+  const quickStatus = document.getElementById("quick-game-status");
+  const quickScores = {
+    X: document.getElementById("quick-score-x"),
+    O: document.getElementById("quick-score-o"),
+    draw: document.getElementById("quick-score-draw"),
+  };
+  const quickWins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  const quickGameDialog = document.getElementById("quick-game");
+  let quickBoard = Array(9).fill("");
+  let quickTurn = "X";
+  let quickFinished = false;
+  const quickScore = { X: 0, O: 0, draw: 0 };
+
+  function resetQuickRound() {
+    quickBoard = Array(9).fill("");
+    quickTurn = "X";
+    quickFinished = false;
+    quickStatus.textContent = "Player X's turn";
+    quickGameCells.forEach((cell, index) => {
+      cell.textContent = "";
+      cell.disabled = false;
+      cell.classList.remove("is-x", "is-o", "is-win");
+      cell.setAttribute("aria-label", `Cell ${index + 1}, empty`);
+    });
+  }
+
+  quickGameCells.forEach((cell) => cell.addEventListener("click", () => {
+    const index = Number(cell.dataset.quickCell);
+    if (quickFinished || quickBoard[index]) return;
+    quickBoard[index] = quickTurn;
+    cell.textContent = quickTurn;
+    cell.classList.add(quickTurn === "X" ? "is-x" : "is-o");
+    cell.setAttribute("aria-label", `Cell ${index + 1}, ${quickTurn}`);
+    const winningLine = quickWins.find(([a,b,c]) => quickBoard[a] && quickBoard[a] === quickBoard[b] && quickBoard[a] === quickBoard[c]);
+    if (winningLine) {
+      quickFinished = true;
+      quickScore[quickTurn] += 1;
+      quickScores[quickTurn].textContent = quickScore[quickTurn];
+      winningLine.forEach((winningIndex) => quickGameCells[winningIndex].classList.add("is-win"));
+      quickStatus.textContent = `Player ${quickTurn} wins!`;
+      quickGameCells.forEach((button) => { button.disabled = true; });
+    } else if (quickBoard.every(Boolean)) {
+      quickFinished = true;
+      quickScore.draw += 1;
+      quickScores.draw.textContent = quickScore.draw;
+      quickStatus.textContent = "Draw — good game.";
+      quickGameCells.forEach((button) => { button.disabled = true; });
+    } else {
+      quickTurn = quickTurn === "X" ? "O" : "X";
+      quickStatus.textContent = `Player ${quickTurn}'s turn`;
+    }
+  }));
+  document.getElementById("quick-game-reset")?.addEventListener("click", resetQuickRound);
+  document.querySelector("[data-quick-game-open]")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    quickGameDialog?.showModal();
+  });
+  document.querySelector("[data-quick-game-close]")?.addEventListener("click", () => quickGameDialog?.close());
+}
 
 function applyTheme(theme) {
   const isLight = theme === "light";
