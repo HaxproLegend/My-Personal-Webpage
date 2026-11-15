@@ -201,9 +201,6 @@ const photoArchive = [{
     const width = firstValue(tags, 0xa002, 0x0100);
     const height = firstValue(tags, 0xa003, 0x0101);
     const dimensions = photo.dimensions || (width && height ? `${width} × ${height} px` : null);
-    const artist = firstValue(tags, 0x013b);
-    const copyright = firstValue(tags, 0x8298);
-
     return [
       ["Camera", camera],
       ["Lens", firstValue(tags, 0xa434, 0xa432)],
@@ -212,7 +209,7 @@ const photoArchive = [{
       ["Shutter speed", formatShutter(shutter)],
       ["ISO", iso ? `ISO ${iso}` : null],
       ["Captured", formatDate(firstValue(tags, 0x9003, 0x0132))],
-      ["Image size", dimensions],
+      ["Original size", dimensions],
       ["Exposure compensation", formatEv(firstValue(tags, 0x9204))],
       ["Exposure program", formatExposureProgram(firstValue(tags, 0x8822))],
       ["White balance", formatWhiteBalance(firstValue(tags, 0xa403))],

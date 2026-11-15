@@ -896,6 +896,10 @@ body[data-theme="light"] .quick-game-board button.is-win { background: rgba(111,
 .photo-settings dt { color:var(--muted); font:.54rem var(--mono); letter-spacing:.12em; text-transform:uppercase; }
 .photo-settings dd { margin:0; color:var(--text); font:.68rem/1.45 var(--mono); overflow-wrap:anywhere; }
 .photo-settings dd.is-unavailable { color:color-mix(in srgb,var(--muted) 72%,transparent); }
+.photo-more-data { margin:0 0 1.25rem; border-top:1px solid var(--border); }
+.photo-more-data summary { padding:.65rem 0; color:var(--muted); cursor:pointer; font:.58rem var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+.photo-more-data summary:hover,.photo-more-data summary:focus-visible { color:var(--accent); outline:none; }
+.photo-more-data[open] .photo-settings { margin-bottom:.5rem; }
 .photobooth-controls { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.7rem; margin-top:auto; }
 .photobooth-controls > button { width:2.2rem; height:2.2rem; border:1px solid var(--border); color:var(--text); background:transparent; cursor:pointer; font:1rem var(--mono); }
 .photobooth-controls > button:hover,.photobooth-controls > button:focus-visible { border-color:var(--accent); color:var(--accent); outline:none; }
@@ -904,10 +908,13 @@ body[data-theme="light"] .quick-game-board button.is-win { background: rgba(111,
 .photobooth-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
 .photobooth-thumb span { position:absolute; right:.25rem; bottom:.15rem; color:#fff; font:.55rem var(--mono); text-shadow:0 1px 5px #000; }
 .photobooth-dates .photobooth-thumb:hover,.photobooth-dates .photobooth-thumb:focus-visible,.photobooth-dates .photobooth-thumb.is-active { border-color:var(--accent); opacity:1; outline:none; }
+@media (max-width:1100px) {
+  .photobooth-shell { grid-template-columns:1fr; }
+  .photobooth-frame { aspect-ratio:3/2; }
+}
 @media (max-width:768px) {
   .photobooth-heading { align-items:start; flex-direction:column; }
   .photobooth-date { text-align:left; }
-  .photobooth-shell { grid-template-columns:1fr; }
   .photobooth-frame { aspect-ratio:4/3; }
   .photobooth-info { min-height:0; }
 }

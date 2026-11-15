@@ -14,7 +14,20 @@ Then open `http://localhost:8000`. The layout uses Tailwind from its CDN, and Go
 
 ## Photobooth
 
-Add each full-size JPEG under `assets/photobooth/`, then add its preview and original paths to `photoArchive` in `photobooth.js`. The gallery reads camera settings from the preview's embedded EXIF metadata; keep EXIF when exporting previews. The original is loaded only for fullscreen viewing. Fields missing from an image are shown as “Not recorded in file”; GPS data is not displayed.
+Add each full-size JPG/JPEG under `assets/photobooth/`, then add its preview and original paths plus original dimensions to `photoArchive` in `photobooth.js`. The gallery reads camera settings from the preview's embedded EXIF metadata; keep EXIF when exporting previews. The original is loaded only for fullscreen viewing. Fields missing from an image are shown as “Not recorded in file”; GPS and photographer/copyright names are not displayed. Camera RAW files such as CR2 are not supported by the browser gallery.
+
+Add a matching entry to the archive:
+
+```js
+{
+  title: "Night drive",
+  image: "assets/photobooth/night-drive-preview.jpg",
+  original: "assets/photobooth/night-drive.jpg",
+  dimensions: "6000 × 4000 px",
+  caption: "A short note about the frame.",
+  tint: "#333b2c"
+}
+```
 
 On macOS, make a 3000-pixel-wide preview while retaining EXIF with:
 
