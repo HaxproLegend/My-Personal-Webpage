@@ -289,7 +289,7 @@
       </div>
     </a>
 
-      <div class="project-item">
+      <div class="project-item project-item--no-arrow">
         <div class="project-num">02</div>
         <div class="project-info">
           <div class="project-name">Electromagnetic Induction Model</div>
@@ -303,10 +303,9 @@
             <span class="tag">Circuit Design</span>
           </div>
         </div>
-        <div class="project-arrow">↗</div>
       </div>
 
-      <div class="project-item">
+      <div class="project-item project-item--no-arrow">
         <div class="project-num">03</div>
         <div class="project-info">
           <div class="project-name">pH Variation in Soaps & Shampoos</div>
@@ -320,7 +319,6 @@
             <span class="tag">Data Analysis</span>
           </div>
         </div>
-        <div class="project-arrow">↗</div>
       </div>
 
       <div class="project-item">
@@ -388,6 +386,7 @@
           <button type="button" data-quick-cell="6" aria-label="Cell 7, empty"></button>
           <button type="button" data-quick-cell="7" aria-label="Cell 8, empty"></button>
           <button type="button" data-quick-cell="8" aria-label="Cell 9, empty"></button>
+          <span class="quick-game-confetti" aria-hidden="true"></span>
         </div>
       </div>
   </dialog>
@@ -539,6 +538,8 @@ if (quickGameCells.length) {
   };
   const quickWins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   const quickGameDialog = document.getElementById("quick-game");
+  const quickGameBoard = document.querySelector(".quick-game-board");
+  const quickGameConfetti = document.querySelector(".quick-game-confetti");
   let quickBoard = Array(9).fill("");
   let quickTurn = "X";
   let quickFinished = false;
@@ -548,6 +549,8 @@ if (quickGameCells.length) {
     quickBoard = Array(9).fill("");
     quickTurn = "X";
     quickFinished = false;
+    delete quickGameBoard.dataset.winningLine;
+    quickGameConfetti.replaceChildren();
     quickStatus.textContent = "Player X's turn";
     quickGameCells.forEach((cell, index) => {
       cell.textContent = "";
@@ -567,9 +570,21 @@ if (quickGameCells.length) {
     const winningLine = quickWins.find(([a,b,c]) => quickBoard[a] && quickBoard[a] === quickBoard[b] && quickBoard[a] === quickBoard[c]);
     if (winningLine) {
       quickFinished = true;
+      quickGameBoard.dataset.winningLine = winningLine.join("-");
       quickScore[quickTurn] += 1;
       quickScores[quickTurn].textContent = quickScore[quickTurn];
       winningLine.forEach((winningIndex) => quickGameCells[winningIndex].classList.add("is-win"));
+      for (let index = 0; index < 18; index += 1) {
+        const angle = (index / 18) * Math.PI * 2;
+        const distance = 55 + (index % 4) * 12;
+        const pixel = document.createElement("span");
+        pixel.className = "quick-game-confetti-pixel";
+        pixel.style.setProperty("--confetti-x", `${Math.round(Math.cos(angle) * distance)}px`);
+        pixel.style.setProperty("--confetti-y", `${Math.round(Math.sin(angle) * distance)}px`);
+        pixel.style.setProperty("--confetti-rotation", `${index * 37}deg`);
+        pixel.style.setProperty("--confetti-delay", `${(index % 5) * 18}ms`);
+        quickGameConfetti.append(pixel);
+      }
       quickStatus.textContent = `Player ${quickTurn} wins!`;
       quickGameCells.forEach((button) => { button.disabled = true; });
     } else if (quickBoard.every(Boolean)) {
